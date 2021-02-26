@@ -61,11 +61,11 @@ Replace `hosted_zone_id` with the zone id of your public and private hosted zone
 }
 ```
 
-2. Create a new IAM role `aws-load-balancer-controller-rol` and attach the IAM policy `aws-load-balancer-controller-pol`
+2. Create new IAM roles `k8s-route53-public-zone-rol` and `k8s-route53-private-zone-rol`. Attach the IAM policies which we had earlier created.
 
-3. Update the trust relationship of the IAM role `aws-load-balancer-controller-rol` as below replacing the `account_id`, `eks_cluster_id` and `region` with the appropriate values.
+3. Update the trust relationship of the IAM roles as below replacing the `account_id`, `eks_cluster_id` and `region` with the appropriate values.
 
-This trust relationship allows pods with serviceaccount `aws-load-balancer-controller` in `platform` namespace to assume the role.
+This trust relationship allows pods with serviceaccount `external-dns-private-zone` in `platform` namespace to assume the role.
 
 ```json
 {
@@ -80,7 +80,7 @@ This trust relationship allows pods with serviceaccount `aws-load-balancer-contr
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "oidc.eks.<region>.amazonaws.com/id/<eks_cluster_id>:sub": "system:serviceaccount:platform:aws-load-balancer-controller"
+          "oidc.eks.<region>.amazonaws.com/id/<eks_cluster_id>:sub": "system:serviceaccount:platform:external-dns-private-zone"
         }
       }
     }
@@ -90,18 +90,20 @@ This trust relationship allows pods with serviceaccount `aws-load-balancer-contr
 
 ### Service Account
 
-Create a new service account in the `platform` namespace and associate it with the IAM role which we had created earlier.
+Create new service accounts in the `platform` namespace and associate it with the IAM roles which we had created earlier.
+
+e.g.
 
 ```bash
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: aws-load-balancer-controller
+  name: external-dns-private-zone
   namespace: platform
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::<AWS_ACCOUNT_ID>:role/aws-load-balancer-controller-rol
+    eks.amazonaws.com/role-arn: arn:aws:iam::<AWS_ACCOUNT_ID>:role/k8s-route53-private-zone-rol
 EOF
 ```
 
-We specify the service account to be used by the pods in the file `stages/shared-values.yaml`
+We specify the service account to be used by the pods, for example, in the file `stages/prod/prod-private-zone-values.yaml`
