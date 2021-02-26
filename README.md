@@ -1,6 +1,11 @@
 # helm-aws-external-dns
 Helm chart for setting up External DNS in your EKS cluster to update public and private Route53 hosted zones.
 
+We need to install two External DNS services, one for updating Route53 public hosted zones and the other for updating private hosted zones.
+
+## Usage
+
+
 
 ## Pre-requisites
 
@@ -65,7 +70,7 @@ Replace `hosted_zone_id` with the zone id of your public and private hosted zone
 
 3. Update the trust relationship of the IAM roles as below replacing the `account_id`, `eks_cluster_id` and `region` with the appropriate values.
 
-This trust relationship allows pods with serviceaccount `external-dns-private-zone` in `platform` namespace to assume the role.
+For example, this trust relationship allows pods with serviceaccount `external-dns-private-zone` in `platform` namespace to assume the role.
 
 ```json
 {
@@ -107,3 +112,23 @@ EOF
 ```
 
 We specify the service account to be used by the pods, for example, in the file `stages/prod/prod-private-zone-values.yaml`
+
+### Config Updates
+
+In `prod-public-zone-values.yaml` file available inside `stages/prod` folder, add values for below settings:
+
+|||
+|--|--|
+|domainFilters |Public domain suffixes |
+|txtOwnerId |Text Registry Identifiers  |
+|eks.amazonaws.com/role-arn |ARN of the IAM role `k8s-route53-public-zone-rol`  |
+
+
+In `prod-private-zone-values.yaml` file available inside `stages/prod` folder, add values for below settings:
+
+|||
+|--|--|
+|domainFilters |Private domain suffixes |
+|txtOwnerId |Text Registry Identifiers  |
+|eks.amazonaws.com/role-arn |ARN of the IAM role `k8s-route53-private-zone-rol`  |
+
