@@ -3,9 +3,32 @@ Helm chart for setting up External DNS in your EKS cluster to update public and 
 
 We need to install two External DNS services, one for updating Route53 public hosted zones and the other for updating private hosted zones.
 
+Table of Contents
+=================
+
+   * [helm-aws-external-dns](#helm-aws-external-dns)
+      * [Usage](#usage)
+      * [Pre-requisites](#pre-requisites)
+         * [Namespace](#namespace)
+         * [IAM](#iam)
+         * [Service Account](#service-account)
+         * [Config Updates](#config-updates)
+
 ## Usage
 
+To create DNS in Route53 public hosted zone, use below annotations in your ingress/service:
 
+```
+external-dns.alpha.kubernetes.io/hostname:
+```
+
+
+To create DNS in Route53 private hosted zone, use below annotations in your ingress/service:
+
+```
+external-dns.alpha.kubernetes.io/hostname:
+external-dns/zone: private
+```
 
 ## Pre-requisites
 
@@ -132,3 +155,12 @@ In `prod-private-zone-values.yaml` file available inside `stages/prod` folder, a
 |txtOwnerId |Text Registry Identifiers  |
 |eks.amazonaws.com/role-arn |ARN of the IAM role `k8s-route53-private-zone-rol`  |
 
+## Install/Upgrade Chart
+
+Run below commands to install/upgrade the public and private external dns charts.
+
+```bash
+helm upgrade -i external-dns-public-zone . -n platform --values stages/prod/prod-public-zone-values.yaml
+
+helm upgrade -i external-dns-private-zone . -n platform --values stages/prod/prod-private-zone-values.yaml
+```
