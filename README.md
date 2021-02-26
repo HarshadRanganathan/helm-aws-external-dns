@@ -1,5 +1,5 @@
 # helm-aws-external-dns
-Helm chart for setting up External DNS in your EKS cluster to update the Route53 records in both the public and private hosted zones.
+Helm chart for setting up External DNS in your EKS cluster to update public and private hosted zones in Route53.
 
 
 ## Pre-requisites
