@@ -1,12 +1,12 @@
 # helm-aws-external-dns
-Helm chart for setting up External DNS in your EKS cluster to update Route53 records in your public and private hosted zones.
+Helm chart for setting up External DNS in your EKS cluster to update the Route53 records in both the public and private hosted zones.
 
 
 ## Pre-requisites
 
 ### Namespace
 
-Create a new namespace `platform` where we will install the `aws-load-balancer-controller` service.
+Create a new namespace `platform` where we will install two external DNS services that will update the Route53 records in the public and private hosted zones.
 
 ```bash
 kubectl create namespace platform
