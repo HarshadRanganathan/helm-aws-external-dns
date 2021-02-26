@@ -1,0 +1,25 @@
+nameOverride: external-dns-public-zone
+
+## Limit possible target zones by domain suffixes (optional)
+##
+domainFilters: []
+
+## Zone Filter. Available values are: public, private, or no value for both
+##
+aws:
+  zoneType: public
+  
+## TXT Registry Identifier
+##
+txtOwnerId: ""
+
+annotationFilter: external-dns/zone notin (private)
+
+## RBAC parameteres
+## https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+##
+rbac:
+  ## Annotations for the Service Account
+  ##
+  serviceAccountAnnotations:
+    eks.amazonaws.com/role-arn:
