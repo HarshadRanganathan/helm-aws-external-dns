@@ -1,12 +1,12 @@
 # helm-aws-external-dns
-Helm chart for setting up External DNS in your EKS cluster to update public and private hosted zones in Route53.
+Helm chart for setting up External DNS in your EKS cluster to update public and private Route53 hosted zones.
 
 
 ## Pre-requisites
 
 ### Namespace
 
-Create a new namespace `platform` where we will install two external DNS services that will update the Route53 records in the public and private hosted zones.
+Create a new namespace `platform` where we will install two external DNS services.
 
 ```bash
 kubectl create namespace platform
@@ -14,7 +14,7 @@ kubectl create namespace platform
 
 ### IAM
 
-We will be using IRSA (IAM Roles for Service Accounts) to give the required permissions to the AWS Load Balancer Controller pod to provision load balancers.
+We will be using IRSA (IAM Roles for Service Accounts) to give the required permissions to the ExternalDNS pods to update Route53.
 
 `Note: You need to create an OIDC provider for your cluster to make use of IRSA. Refer - https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html`
 
