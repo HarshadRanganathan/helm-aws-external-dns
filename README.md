@@ -1,6 +1,8 @@
 # helm-aws-external-dns
 Helm chart for setting up External DNS in your EKS cluster to update public and private Route53 hosted zones.
 
+Chart Reference - https://github.com/helm/charts/tree/master/stable/external-dns
+
 We need to install two External DNS services, one for updating Route53 public hosted zones and the other for updating private hosted zones.
 
 Table of Contents
