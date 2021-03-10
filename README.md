@@ -13,7 +13,6 @@ Table of Contents
       * [Pre-requisites](#pre-requisites)
          * [Namespace](#namespace)
          * [IAM](#iam)
-         * [Service Account](#service-account)
          * [Config Updates](#config-updates)
 
 ## Usage
