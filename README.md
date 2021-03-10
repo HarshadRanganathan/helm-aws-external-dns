@@ -91,7 +91,7 @@ Replace `hosted_zone_id` with the zone id of your public and private hosted zone
 }
 ```
 
-2. Create new IAM roles `k8s-route53-public-zone-rol` and `k8s-route53-private-zone-rol`. Attach the IAM policies which we had earlier created.
+2. Create new IAM roles `k8s-route53-public-zone-rol` and `k8s-route53-private-zone-rol`. Attach the IAM policies which we had created earlier.
 
 3. Update the trust relationship of the IAM roles as below replacing the `account_id`, `eks_cluster_id` and `region` with the appropriate values.
 
@@ -118,26 +118,6 @@ For example, this trust relationship allows pods with serviceaccount `external-d
 }
 ```
 
-### Service Account
-
-Create new service accounts in the `platform` namespace and associate it with the IAM roles which we had created earlier.
-
-e.g.
-
-```bash
-kubectl apply -f - <<EOF
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: external-dns-private-zone
-  namespace: platform
-  annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::<AWS_ACCOUNT_ID>:role/k8s-route53-private-zone-rol
-EOF
-```
-
-We specify the service account to be used by the pods, for example, in the file `stages/prod/prod-private-zone-values.yaml`
-
 ### Config Updates
 
 In `prod-public-zone-values.yaml` file available inside `stages/prod` folder, add values for below settings:
@@ -146,7 +126,7 @@ In `prod-public-zone-values.yaml` file available inside `stages/prod` folder, ad
 |--|--|
 |domainFilters |Public domain suffixes |
 |txtOwnerId |Text Registry Identifiers  |
-|eks.amazonaws.com/role-arn |ARN of the IAM role `k8s-route53-public-zone-rol`  |
+|eks.amazonaws.com/role-arn |ARN of the IAM role `k8s-route53-public-zone-rol`. This will be added as an annotation to the service account `external-dns-public-zone`  |
 
 
 In `prod-private-zone-values.yaml` file available inside `stages/prod` folder, add values for below settings:
@@ -155,7 +135,7 @@ In `prod-private-zone-values.yaml` file available inside `stages/prod` folder, a
 |--|--|
 |domainFilters |Private domain suffixes |
 |txtOwnerId |Text Registry Identifiers  |
-|eks.amazonaws.com/role-arn |ARN of the IAM role `k8s-route53-private-zone-rol`  |
+|eks.amazonaws.com/role-arn |ARN of the IAM role `k8s-route53-private-zone-rol`. This will be added as an annotation to the service account `external-dns-private-zone`  |
 
 ## Install/Upgrade Chart
 
