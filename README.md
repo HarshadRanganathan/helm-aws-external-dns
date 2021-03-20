@@ -14,7 +14,7 @@ Table of Contents
          * [Namespace](#namespace)
          * [IAM](#iam)
          * [Config Updates](#config-updates)
-      * [Install/Upgrade Chart](#install/upgrade-chart)
+      * [Install/Upgrade Chart](#installupgrade-chart)
 
 ## Usage
 
